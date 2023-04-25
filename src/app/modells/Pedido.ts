@@ -3,6 +3,7 @@ import { Producto } from "./Producto";
 
 export class Pedido{
     public idPedido?: number
-    public productos?: Producto[] ;
-    public comprador?: Persona ;
+    public producto?: Producto ;
+    public comprador?: string ;
+    public cantidad?: number
 }

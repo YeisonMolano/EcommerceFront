@@ -1,9 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Pedido } from 'src/app/modells/Pedido';
+import { Persona } from 'src/app/modells/Persona';
 import { Producto } from 'src/app/modells/Producto';
 import { AuthService } from 'src/app/service/auth.service';
+import { PedidoService } from 'src/app/service/pedido.service';
 import { ProductoService } from 'src/app/service/producto.service';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 
 @Component({
@@ -13,31 +21,42 @@ import { ProductoService } from 'src/app/service/producto.service';
 })
 export class PrincipalComponent implements OnInit{
   isAdmin: boolean
+  comprador: Persona
   productos: Array<Producto>
   carrito: Array<Producto>
   cantidadDeCompra: number
+  productoNuevo: Producto
+  formProductoNuevo: FormGroup
+  newProducto: boolean
+  editar : number
+  id: number
 
-  constructor(private aService: AuthService, private pService: ProductoService){
+  constructor(private fb: FormBuilder, private aService: AuthService, private pService: ProductoService, private pedidoService: PedidoService){
     this.isAdmin = false
+    this.comprador = new Persona()
     this.cantidadDeCompra = 1
     this.productos = new Array<Producto>()
     this.carrito = new Array<Producto>()
-    let producto = new Producto()
-    producto.stock = 15
-    producto.categoria = 'hola'
-    producto.foto = 'https://upload.wikimedia.org/wikipedia/commons/3/38/Gift-wraping.jpg'
-    producto.idProducto = 12345
-    producto.nombreProducto = 'Producto'
-    producto.referencia = 'qwert'
-    this.productos.push(producto)
-    this.productos.push(producto)
+    this.productoNuevo = new Producto()
+    this.newProducto = false
+    this.editar = 0
+    this.id = 0
+    this.formProductoNuevo = fb.group({
+      idProducto: new FormControl('', []),
+      nombreProducto: new FormControl('', []),
+      referencia: new FormControl('', []),
+      categoria: new FormControl('', []),
+      stock: new FormControl('', []),
+      foto: new FormControl('', [])
+    })
   }
 
   ngOnInit(): void {
-    if(this.aService.auth){
+    if(localStorage.getItem('auth') == 'admin'){
       this.isAdmin = true
     }
     this.getAllProductos()
+    console.log(this.editar);
   }
 
   getAllProductos(){
@@ -55,13 +74,92 @@ export class PrincipalComponent implements OnInit{
   toggle(op: OverlayPanel, producto: Producto){
     producto.cantidad = this.cantidadDeCompra
     this.carrito.push(producto)
+    this.cantidadDeCompra = 1
     op.hide();
   }
 
   comprar(){
-    let pedido = new Pedido()
-    pedido.comprador = {}
-    pedido.productos = this.carrito
-    console.log(pedido);
+    this.carrito.forEach((pedido) =>{
+        let pedidoNew = new Pedido()
+        if(localStorage.getItem('nombre') != undefined){
+          pedidoNew.comprador = localStorage.getItem('nombre')?.toString()
+        }
+        console.log( localStorage.getItem('nombre'));
+        
+        pedidoNew.producto = pedido
+        pedidoNew.cantidad = pedido.cantidad
+        this.pedidoService.newPedido(pedidoNew).subscribe(res =>{
+          this.getAllProductos()
+        })
+    })
+    
+    this.getAllProductos()
+  }
+
+  crearProducto(){
+    if(this.formProductoNuevo.valid){
+    let productouevo = new Producto()
+    productouevo.categoria = this.formProductoNuevo.get('categoria')?.value
+    productouevo.foto = this.formProductoNuevo.get('foto')?.value
+    productouevo.idProducto = this.formProductoNuevo.get('idProducto')?.value
+    productouevo.nombreProducto = this.formProductoNuevo.get('nombreProducto')?.value
+    productouevo.referencia = this.formProductoNuevo.get('referencia')?.value
+    productouevo.stock = this.formProductoNuevo.get('stock')?.value
+    this.pService.newProducto(productouevo).subscribe(res => {
+      this.getAllProductos()
+      this.openNewProducto()
+      this.formProductoNuevo.reset()
+    },
+    err =>{
+      console.log('Ha habido un error');
+    })
+    }
+  }
+
+  openNewProducto(){
+    this.newProducto = !this.newProducto
+  }
+
+  deleteProducto(idProducto: number){
+    this.pService.deleteProducto(idProducto).subscribe(res =>{
+      this.getAllProductos()
+    })
+  }
+
+  cargarUpdate(producto : Producto){
+    this.openNewProducto()
+    this.editar = 1
+    this.formProductoNuevo.get('categoria')?.setValue(producto.categoria)
+    this.formProductoNuevo.get('foto')?.setValue(producto.foto)
+    this.formProductoNuevo.get('idProducto')?.setValue(producto.idProducto)
+    this.formProductoNuevo.get('nombreProducto')?.setValue(producto.nombreProducto)
+    this.formProductoNuevo.get('referencia')?.setValue(producto.referencia)
+    this.formProductoNuevo.get('stock')?.setValue(producto.stock)
+    this.id = this.formProductoNuevo.get('idProducto')?.value
+  }
+
+  update(){
+    if(this.formProductoNuevo.valid){
+      let productouevo = new Producto()
+      productouevo.categoria = this.formProductoNuevo.get('categoria')?.value
+      productouevo.foto = this.formProductoNuevo.get('foto')?.value
+      productouevo.idProducto = this.formProductoNuevo.get('idProducto')?.value
+      productouevo.nombreProducto = this.formProductoNuevo.get('nombreProducto')?.value
+      productouevo.referencia = this.formProductoNuevo.get('referencia')?.value
+      productouevo.stock = this.formProductoNuevo.get('stock')?.value
+      console.log(productouevo);
+      
+      this.pService.updateProducto(this.id, productouevo).subscribe(res => {
+        this.getAllProductos()
+        this.openNewProducto()
+        this.formProductoNuevo.reset()
+        this.editar = 0
+        console.log(res);
+        
+      },
+      err =>{
+        console.log('Ha habido un error');
+      })
+      }
   }
 }

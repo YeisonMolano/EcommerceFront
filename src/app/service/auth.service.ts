@@ -10,13 +10,14 @@ export class AuthService {
     this.auth = false
    }
 
-  logIn(isAdmin: boolean){
+  logIn(isAdmin: boolean, username: string){
     if(isAdmin){
-      this.auth = true
+      localStorage.setItem('auth', 'admin')
     }
+    localStorage.setItem('nombre', username)
   }
 
   logOut(){
-    this.auth = false
+    localStorage.clear()
   }
 }

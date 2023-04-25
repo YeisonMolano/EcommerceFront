@@ -1,39 +1,209 @@
 <app-header></app-header>
-<p-dataView #dv [value]="productos">
-    <ng-template let-producto pTemplate="listItem">
-        <div class="p-card p-m-2 p-p-3">
-            <div class="p-grid p-d-flex">
-                <div class="p-lg-8">
-                    <img [src]="producto.foto" alt="" style="width: 100px;">
+<div class="p-grid">
+    <div class="p-lg-9">
+        <div *ngIf="isAdmin" class="p-d-flex p-jc-end p-mb-2">
+            <button
+              pButton
+              (click)="openNewProducto()"
+              icon="pi pi-shopping-cart"
+              class=""
+              label="Crear Producto"
+            ></button>
+          </div>
+          <div class="p-d-flex p-jc-end">
+            <button
+            pButton
+            (click)="comprar()"
+            icon="pi pi-shopping-cart"
+            class="md:align-self-end mb-2"
+            label="Realizar compra"
+          ></button>
+          </div>
+          <p-dataView #dv [value]="productos">
+            <ng-template let-producto pTemplate="listItem">
+              <div class="p-card p-m-2 p-p-3">
+                <div class="p-d-flex">
+                  <div class="p-lg-8">
+                    <img [src]="producto.foto" alt="" style="width: 100px" />
+                  </div>
+                  <div class="p-lg-4 p-d-flex p-jc-end">
+                    <p>Stock:</p>
+                    <p>{{ producto.stock }}</p>
+                  </div>
                 </div>
-                    <div class="p-lg-4 p-d-flex p-jc-end">
-                        <p>Stock:</p>
-                        <p>{{producto.stock}}</p>
-                    </div>
-            </div>
-            <div class="p-d-flex p-jc-between">
-                <div>
-                    <p>{{producto.categoria}}</p>
-                </div>
-                <div>
+                <div class="p-d-flex p-jc-between">
+                  <div class="p-d-flex p-ai-center p-mr-4">
+                    <label>{{ producto.categoria }}</label>
+                  </div>
+                  <div
+                    class="p-d-flex p-ai-center"
+                    
+                  >
                     <p-overlayPanel #op>
-                        <div>
-                            <label for="">Cantidad</label>
-                            <p-inputNumber [(ngModel)]="cantidadDeCompra" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="producto.stock"> </p-inputNumber>
-                        </div>
-                        <div class="p-d-flex p-jc-end">
-                            <button pButton (click)="toggle(op, producto)" icon="pi pi-check" class="md:align-self-end mb-2 p-button-rounded" [disabled]="producto.cantidad === 'OUTOFSTOCK'"></button>
-                        </div>
+                      <div>
+                        <label for="">Cantidad</label>
+                        <p-inputNumber class="change"
+                          [(ngModel)]="cantidadDeCompra"
+                          mode="decimal"
+                          [showButtons]="true"
+                          inputId="minmax-buttons"
+                          [min]="1"
+                          [max]="producto.stock"
+                        >
+                        </p-inputNumber>
+                      </div>
+                      <div class="p-d-flex p-jc-end">
+                        <button
+                          pButton
+                          (click)="toggle(op, producto)"
+                          icon="pi pi-check"
+                          class="p-mr-2 p-button-rounded"
+                          [disabled]="producto.stcok <= 0" 
+                        ></button>
+                      </div>
                     </p-overlayPanel>
-                    <button pButton (click)="op.toggle($event)" icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded" [disabled]="producto.cantidad === 'OUTOFSTOCK'"></button>
+                    <div>
+                      <button
+                        pButton
+                        (click)="op.toggle($event)"
+                        icon="pi pi-shopping-cart"
+                        class="p-mr-2 p-button-rounded"
+                        [disabled]="producto.stock <= 0" 
+                      ></button>
+                    </div>
+                    <div *ngIf="isAdmin">
+                      <button
+                        pButton
+                        *ngIf="isAdmin"
+                        icon="pi pi-pencil"
+                        class="p-mr-2 p-button-rounded"
+                        (click)="cargarUpdate(producto)"
+                      ></button>
+                    </div>
+          
+                    <div *ngIf="isAdmin">
+                      <button
+                        pButton
+                        icon="pi pi-times"
+                        class="md:align-self-end mb-2 p-button-rounded small"
+                        (click)="deleteProducto(producto.idProducto)"
+                      ></button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-            <div class="p-d-flex p-jc-center">
-                <p>{{producto.nombreProducto}}</p>
-            </div>
-        </div>
-        
+                <div class="p-d-flex p-jc-center">
+                  <p>{{ producto.nombreProducto }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </p-dataView>
+    </div>
+    <div class="p-lg-3">
 
-    </ng-template>
-</p-dataView>
-<button pButton (click)="comprar()" icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded"></button>
+    </div>
+</div>
+
+
+
+
+<!--Modulo para crear un nuevo producto-->
+<p-dialog class="p-grid" [(visible)]="newProducto">
+  <ng-template pTemplate="header">Crear nuevo producto </ng-template>
+  <!--Se utiliza el misme formulario para crear y editar el producto-->
+  <div>
+    <form action="" [formGroup]="formProductoNuevo">
+        <div class="p-grid">
+          <div class="p-lg-6">
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-cart-plus"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Identificador"
+                formControlName="idProducto"
+              />
+            </div>
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-plus-circle"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Nombre de producto"
+                formControlName="nombreProducto"
+              />
+            </div>
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-check-circle"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Referencia"
+                formControlName="referencia"
+              />
+            </div>
+          </div>
+    
+          <div class="p-lg-6">
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-unlock"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Categoria"
+                formControlName="categoria"
+              />
+            </div>
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-file-edit"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Stock disponible"
+                formControlName="stock"
+              />
+            </div>
+            <div class="p-inputgroup p-mb-6">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-camera"></i>
+              </span>
+              <input
+                pInputText
+                placeholder="Url de la imagen"
+                formControlName="foto"
+              />
+            </div>
+          </div>
+          <div class="p-lg-12 p-d-flex p-jc-end p-pr-6">
+            <div *ngIf="editar != 1; else actualizar">
+            <p-button
+              label="Crear"
+              icon="pi pi-check"
+              styleClass="p-button-text p-button-raised"
+              (onClick)="crearProducto()"
+            ></p-button>
+            </div>
+            <ng-template #actualizar>
+                <div class="p-lg-12 p-d-flex p-jc-end p-pr-6">
+                <button
+              pButton
+              (click)="update()"
+              label="Editar"
+              icon="pi pi-shopping-cart"
+              class="md:align-self-end mb-2 p-button-rounded"
+            ></button>
+            </div>
+            </ng-template>
+          </div>
+        </div>
+      </form>
+  </div>
+  
+</p-dialog>
+
+
+<!--Dialogo para poder editar un producto-->

@@ -20,13 +20,15 @@ export class ProductoService {
     })
   }
 
-  updateProducto(producto: Producto){
-    return this.http.put<Producto>(this.rutaGlobal + producto.idProducto, producto, {
+  updateProducto(idUpdate: number, producto: Producto){    
+    return this.http.put<Producto>(this.rutaGlobal + idUpdate, producto, {
       observe: 'response'
     })
   }
 
   deleteProducto(idProducto : number){
+    console.log(this.rutaGlobal + idProducto, idProducto);
+    
     return this.http.delete(this.rutaGlobal + idProducto)
   }
 }

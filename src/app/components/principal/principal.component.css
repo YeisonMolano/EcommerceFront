@@ -1,0 +1,35 @@
+:host ::ng-deep .p-button.p-button-icon-only.p-button-rounded{
+    width: 2rem;
+    height: 2rem;
+}
+
+:host ::ng-deep .p-button{
+    background: rgb(255, 115, 0);
+    border-color: rgb(255, 89, 0);
+}
+
+:host ::ng-deep .p-button:hover{
+    background: rgb(255, 94, 0);
+    border-color: rgb(255, 89, 0);
+}
+
+:host ::ng-deep .p-button.p-button-text:enabled:hover{
+    background: rgb(255, 94, 0);
+    border-color: rgb(255, 89, 0);
+    color: aliceblue;
+}
+
+:host ::ng-deep .p-inputnumber-button{
+    background: rgb(255, 94, 0);
+    border-color: rgb(255, 89, 0);
+}
+
+:host ::ng-deep .p-button.p-button-icon-only.p-button-rounded{
+    background: rgb(255, 94, 0);
+    border-color: rgb(255, 89, 0);
+}
+
+:host ::ng-deep button.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-up{
+    background: rgb(255, 94, 0);
+    border-color: rgb(255, 89, 0);
+}

@@ -1,0 +1,9 @@
+img{
+    width: 100px;
+    height: 60px;
+}
+
+.container{
+    background-color: rgb(255, 115, 0);
+    color: aliceblue;
+}
