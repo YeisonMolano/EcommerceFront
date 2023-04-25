@@ -3,6 +3,7 @@ export class Producto{
     public nombreProducto?: String 
     public referencia?: String 
     public categoria?: String 
+    public stock?: number
+    public foto?: String
     public cantidad?: number
-    public foto?: String 
 }

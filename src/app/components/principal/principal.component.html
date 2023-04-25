@@ -1,0 +1,39 @@
+<app-header></app-header>
+<p-dataView #dv [value]="productos">
+    <ng-template let-producto pTemplate="listItem">
+        <div class="p-card p-m-2 p-p-3">
+            <div class="p-grid p-d-flex">
+                <div class="p-lg-8">
+                    <img [src]="producto.foto" alt="" style="width: 100px;">
+                </div>
+                    <div class="p-lg-4 p-d-flex p-jc-end">
+                        <p>Stock:</p>
+                        <p>{{producto.stock}}</p>
+                    </div>
+            </div>
+            <div class="p-d-flex p-jc-between">
+                <div>
+                    <p>{{producto.categoria}}</p>
+                </div>
+                <div>
+                    <p-overlayPanel #op>
+                        <div>
+                            <label for="">Cantidad</label>
+                            <p-inputNumber [(ngModel)]="cantidadDeCompra" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="producto.stock"> </p-inputNumber>
+                        </div>
+                        <div class="p-d-flex p-jc-end">
+                            <button pButton (click)="toggle(op, producto)" icon="pi pi-check" class="md:align-self-end mb-2 p-button-rounded" [disabled]="producto.cantidad === 'OUTOFSTOCK'"></button>
+                        </div>
+                    </p-overlayPanel>
+                    <button pButton (click)="op.toggle($event)" icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded" [disabled]="producto.cantidad === 'OUTOFSTOCK'"></button>
+                </div>
+            </div>
+            <div class="p-d-flex p-jc-center">
+                <p>{{producto.nombreProducto}}</p>
+            </div>
+        </div>
+        
+
+    </ng-template>
+</p-dataView>
+<button pButton (click)="comprar()" icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded"></button>
