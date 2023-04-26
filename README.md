@@ -1,5 +1,10 @@
 # EcommerceFront
 
+Este proyecto esta realizado en Angular versión Angular CLI: 15.2.4 con Node: 18.15.0
+Para la parte de los estilos se utilizo Primeng
+
+Esta diseñada para el consumo de los enpoints vistos en el repositio backend, integrando parte visual.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
 ## Development server
