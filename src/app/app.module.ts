@@ -7,11 +7,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DataViewModule, DataViewLayoutOptions } from 'primeng/dataview';
-import { ConfirmationService } from 'primeng/api'; 
+import { ConfirmationService, MessageService } from 'primeng/api'; 
 import { TagModule } from 'primeng/tag';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,9 +44,10 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     TagModule,
     OverlayPanelModule,
     InputNumberModule,
-    DialogModule
+    DialogModule,
+    ToastModule
   ],
-  providers: [ConfirmationService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [MessageService, ConfirmationService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

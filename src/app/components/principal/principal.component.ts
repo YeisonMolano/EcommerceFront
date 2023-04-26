@@ -12,6 +12,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class PrincipalComponent implements OnInit{
   editar : number
   id: number
 
-  constructor(private fb: FormBuilder, private aService: AuthService, private pService: ProductoService, private pedidoService: PedidoService){
+  constructor(private message: MessageService, private fb: FormBuilder, private aService: AuthService, private pService: ProductoService, private pedidoService: PedidoService){
     this.isAdmin = false
     this.comprador = new Persona()
     this.cantidadDeCompra = 1
@@ -56,7 +57,6 @@ export class PrincipalComponent implements OnInit{
       this.isAdmin = true
     }
     this.getAllProductos()
-    console.log(this.editar);
   }
 
   getAllProductos(){
@@ -76,6 +76,7 @@ export class PrincipalComponent implements OnInit{
     this.carrito.push(producto)
     this.cantidadDeCompra = 1
     op.hide();
+    this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha agregado un nuevo producto a tu carrito' });
   }
 
   comprar(){
@@ -92,7 +93,7 @@ export class PrincipalComponent implements OnInit{
           this.getAllProductos()
         })
     })
-    
+    this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha realizado la compra' });
     this.getAllProductos()
   }
 
@@ -109,10 +110,14 @@ export class PrincipalComponent implements OnInit{
       this.getAllProductos()
       this.openNewProducto()
       this.formProductoNuevo.reset()
+      this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha creado un nuevo producto' });
     },
     err =>{
-      console.log('Ha habido un error');
+      this.message.add({ severity: 'warn', summary: 'Error', detail: 'Ha habido un error al ingresar los datos intentelo nuevamente' });
+      this.formProductoNuevo.reset()
     })
+    }else{
+      this.message.add({ severity: 'warn', summary: 'Datos invalidos', detail: 'Por favor ingrese todos los campos' });
     }
   }
 
@@ -123,6 +128,10 @@ export class PrincipalComponent implements OnInit{
   deleteProducto(idProducto: number){
     this.pService.deleteProducto(idProducto).subscribe(res =>{
       this.getAllProductos()
+      this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha eliminado el producto' });
+    },
+    err =>{
+      this.message.add({ severity: 'warn', summary: 'Error', detail: 'Hubo un error al eliminar el producto' });
     })
   }
 
@@ -155,10 +164,10 @@ export class PrincipalComponent implements OnInit{
         this.formProductoNuevo.reset()
         this.editar = 0
         console.log(res);
-        
+        this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha actualizado el producto' });
       },
       err =>{
-        console.log('Ha habido un error');
+        this.message.add({ severity: 'warn', summary: 'Datos invalidos', detail: 'Ha habido un error al actualizar' });
       })
       }
   }
