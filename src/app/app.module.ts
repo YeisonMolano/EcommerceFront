@@ -13,6 +13,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
+import { OrderListModule } from 'primeng/orderlist';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -45,7 +46,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     OverlayPanelModule,
     InputNumberModule,
     DialogModule,
-    ToastModule
+    ToastModule,
+    OrderListModule
   ],
   providers: [MessageService, ConfirmationService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

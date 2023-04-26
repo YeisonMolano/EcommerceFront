@@ -31,6 +31,7 @@ export class PrincipalComponent implements OnInit{
   newProducto: boolean
   editar : number
   id: number
+  mostrarPosiblesCompras: boolean
 
   constructor(private message: MessageService, private fb: FormBuilder, private aService: AuthService, private pService: ProductoService, private pedidoService: PedidoService){
     this.isAdmin = false
@@ -42,6 +43,7 @@ export class PrincipalComponent implements OnInit{
     this.newProducto = false
     this.editar = 0
     this.id = 0
+    this.mostrarPosiblesCompras = false
     this.formProductoNuevo = fb.group({
       idProducto: new FormControl('', []),
       nombreProducto: new FormControl('', []),
@@ -62,6 +64,7 @@ export class PrincipalComponent implements OnInit{
   getAllProductos(){
     this.pService.getAllProductos().subscribe(res =>{
       this.productos = res
+      console.log(this.productos);
     })
   }
 
@@ -76,6 +79,8 @@ export class PrincipalComponent implements OnInit{
     this.carrito.push(producto)
     this.cantidadDeCompra = 1
     op.hide();
+    console.log(this.carrito);
+    
     this.message.add({ severity: 'success', summary: 'Aplicado', detail: 'Se ha agregado un nuevo producto a tu carrito' });
   }
 
@@ -170,5 +175,9 @@ export class PrincipalComponent implements OnInit{
         this.message.add({ severity: 'warn', summary: 'Datos invalidos', detail: 'Ha habido un error al actualizar' });
       })
       }
+  }
+
+  vercarrito(){
+    this.mostrarPosiblesCompras = !this.mostrarPosiblesCompras
   }
 }

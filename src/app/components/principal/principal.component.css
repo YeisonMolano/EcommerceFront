@@ -33,3 +33,7 @@
     background: rgb(255, 94, 0);
     border-color: rgb(255, 89, 0);
 }
+
+.dialog{
+    width: 500px;
+}
