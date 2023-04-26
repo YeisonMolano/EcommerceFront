@@ -5,6 +5,31 @@ Para la parte de los estilos se utilizo Primeng
 
 Esta diseñada para el consumo de los enpoints vistos en el repositio backend, integrando parte visual.
 
+Se adjuntan algunas imagenes del Funcionamiento.
+
+Para la parte del login se recomienda ingresar con un nombre cualquiera con el fin de evitar el registro, sin embargo se van a poder realizar las compras con su respectiva identidad.
+Se requiere el ingreso tipo administrador o simplemente tipo comprador con el fin de ver las diferentes funcionalidades
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/105460971/234435395-a879d7c5-310a-4dd6-a9c1-db681aef6913.png">
+
+Vista de un usuario normal
+
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/105460971/234435689-fecd4a73-5235-491b-bf42-16d87171a86e.png">
+
+
+Vista de un administrador
+
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/105460971/234435642-0546968a-058f-4387-888d-5548258518ec.png">
+
+Creación de un producto
+
+<img width="535" alt="image" src="https://user-images.githubusercontent.com/105460971/234435753-05107d6c-247d-44c4-b670-78d49548141d.png">
+
+
+Edición de un producto
+
+<img width="786" alt="image" src="https://user-images.githubusercontent.com/105460971/234435795-1e3f1131-5b63-4ada-bac3-3546a435078d.png">
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
 ## Development server
